@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.ericktijerou.koleton:koleton:1.0.0-beta01@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/AppData/Local/Android/Sdk/caches/transforms-2/files-2.1/4086da77d719c832879975c0a42a85c4/jetified-koleton-1.0.0-beta01/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/AppData/Local/Android/Sdk/caches/transforms-2/files-2.1/4086da77d719c832879975c0a42a85c4/jetified-koleton-1.0.0-beta01/res" />
+      <root url="file://$USER_HOME$/AppData/Local/Android/Sdk/caches/transforms-2/files-2.1/4086da77d719c832879975c0a42a85c4/jetified-koleton-1.0.0-beta01/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/AppData/Local/Android/Sdk/caches/modules-2/files-2.1/com.ericktijerou.koleton/koleton/1.0.0-beta01/f68be93280161dcfdd385c35ddcbea839374e9a7/koleton-1.0.0-beta01-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/AppData/Local/Android/Sdk/caches/modules-2/files-2.1/com.ericktijerou.koleton/koleton/1.0.0-beta01/2b1973624366b94b0be89812e83ce97b549baa8f/koleton-1.0.0-beta01-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

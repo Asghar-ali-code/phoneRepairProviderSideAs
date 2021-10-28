@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.poovamraj:PinEditTextField:1.2.6@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/AppData/Local/Android/Sdk/caches/transforms-2/files-2.1/b2cec976f567302d4e7b69ad81a0fad6/jetified-PinEditTextField-1.2.6/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/AppData/Local/Android/Sdk/caches/transforms-2/files-2.1/b2cec976f567302d4e7b69ad81a0fad6/jetified-PinEditTextField-1.2.6/res" />
+      <root url="file://$USER_HOME$/AppData/Local/Android/Sdk/caches/transforms-2/files-2.1/b2cec976f567302d4e7b69ad81a0fad6/jetified-PinEditTextField-1.2.6/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/AppData/Local/Android/Sdk/caches/modules-2/files-2.1/com.github.poovamraj/PinEditTextField/1.2.6/bdfc1c9bed8292216cf3aeaa23f270d41d6b422b/PinEditTextField-1.2.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
