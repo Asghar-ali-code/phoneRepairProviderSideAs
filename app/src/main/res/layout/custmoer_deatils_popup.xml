@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/popup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginStart="@dimen/_12sdp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="@dimen/_12sdp"
+        app:cardElevation="@dimen/_8sdp"
+        app:cardCornerRadius="@dimen/_10sdp"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/imghuman"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:src="@drawable/human"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/tvname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mark Evans"
+                android:textSize="@dimen/_12ssp"
+                android:fontFamily="@font/poppins_medium"
+                android:textColor="@color/blue"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imghuman"
+                />
+
+            <TextView
+                android:id="@+id/tvissue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/tvname"
+                android:text="Issue:"
+                android:textColor="@color/blue"
+                app:layout_constraintStart_toStartOf="parent"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="@dimen/_10ssp"
+                android:paddingLeft="@dimen/_25sdp"
+                />
+
+            <TextView
+                android:id="@+id/tvissue1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/tvissue"
+                android:text="Iphone X- Broken Screen"
+                app:layout_constraintTop_toBottomOf="@+id/tvname"
+                android:textSize="@dimen/_10ssp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginLeft="@dimen/_15sdp"
+                />
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/tvissue1"
+                android:layout_marginTop="@dimen/_5sdp"
+                />
+            <TextView
+                android:id="@+id/tvdetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/view1"
+                android:text="Details:"
+                android:textColor="@color/blue"
+                app:layout_constraintStart_toStartOf="parent"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="@dimen/_10ssp"
+                android:paddingLeft="@dimen/_25sdp"
+                />
+
+            <TextView
+                android:id="@+id/tvdetails1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/tvissue"
+                android:text="I dropped my phone and now its screen is broken. It is working fine though"
+                app:layout_constraintTop_toBottomOf="@+id/view1"
+                android:textSize="@dimen/_10ssp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginLeft="@dimen/_130sdp"
+                />
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/tvdetails1"
+                android:layout_marginTop="@dimen/_5sdp"
+                />
+            <TextView
+                android:id="@+id/tvaddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/view2"
+                android:text="Address:"
+                android:textColor="@color/blue"
+                app:layout_constraintStart_toStartOf="parent"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="@dimen/_10ssp"
+                android:paddingLeft="@dimen/_25sdp"
+                />
+
+            <TextView
+                android:id="@+id/tvaddress1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/tvaddress"
+                android:text="House#21, Street#24, Block A-44, Westeria Road, Washington, USA"
+                app:layout_constraintTop_toBottomOf="@+id/view2"
+                android:textSize="@dimen/_10ssp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginLeft="@dimen/_130sdp"
+                />
+            <View
+                android:id="@+id/view3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/tvaddress1"
+                android:layout_marginTop="@dimen/_5sdp"
+                />
+
+            <TextView
+                android:id="@+id/tvprice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/view3"
+                android:text="Price:"
+                android:textColor="@color/blue"
+                app:layout_constraintStart_toStartOf="parent"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="@dimen/_10ssp"
+                android:paddingLeft="@dimen/_25sdp"
+                />
+            <TextView
+                android:id="@+id/tvprice1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/tvprice"
+                android:text="$60 ($30 Paid in advance in booking process)"
+                app:layout_constraintTop_toBottomOf="@+id/view3"
+                android:textSize="@dimen/_10ssp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginLeft="@dimen/_130sdp"
+                />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toBottomOf="@+id/tvprice1"
+                android:layout_marginTop="@dimen/_5sdp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnreject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/red"
+                android:fontFamily="@font/poppins_medium"
+                android:paddingStart="@dimen/_24sdp"
+                android:paddingEnd="@dimen/_24sdp"
+                android:text="Reject"
+                android:layout_marginStart="@dimen/_24sdp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view4" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnaccept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/green"
+                android:fontFamily="@font/poppins_medium"
+                android:paddingStart="@dimen/_24sdp"
+                android:paddingEnd="@dimen/_24sdp"
+                android:text="Accept"
+                android:layout_marginEnd="@dimen/_24sdp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view4" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

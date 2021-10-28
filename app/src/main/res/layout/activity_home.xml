@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false"
+    android:foregroundGravity="left"
+    tools:context=".livedata.View.Activity.ActivityHome">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:padding="@dimen/_5sdp"
+            >
+
+            <ImageView
+                android:id="@+id/iv_drawer"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:src="@drawable/drawer"
+                android:padding="@dimen/_5sdp"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                app:tint="@color/gray" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_50sdp"
+                android:layout_marginStart="@dimen/_50sdp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:textSize="@dimen/_14ssp"
+                android:text="I phone Repair Services"
+                android:textColor="@color/blue"
+                android:fontFamily="@font/poppins_medium"/>
+
+            <ImageView
+                android:id="@+id/iv_noti"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:padding="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_3sdp"
+                android:src="@drawable/bell"
+                app:tint="@color/gray" />
+        </RelativeLayout>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+
+        <me.ibrahimsn.lib.SmoothBottomBar
+            android:id="@+id/bottom_nav"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            app:backgroundColor="@color/white"
+            app:indicatorColor="@color/light_blue"
+            android:elevation="@dimen/_16sdp"
+            app:indicatorRadius="@dimen/_8sdp"
+            app:itemPadding="@dimen/_5sdp"
+            app:textColor="@color/blue"
+            app:itemFontFamily="@font/poppins_regular"
+            app:textSize="@dimen/_12ssp"
+            app:iconSize="@dimen/_20sdp"
+            app:iconTint="@color/blue"
+            app:iconTintActive="@color/blue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_nav_menu" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nevmenu"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="false">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constdr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_150sdp"
+                android:background="@color/grey"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circleImageView"
+                    android:layout_width="@dimen/_90sdp"
+                    android:layout_height="@dimen/_90sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:src="@drawable/ellipse"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:src="@drawable/check"
+                    app:layout_constraintEnd_toEndOf="@id/circleImageView"
+                    app:layout_constraintTop_toTopOf="@id/circleImageView" />
+
+                <TextView
+                    android:id="@+id/textV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="Jennifer Paul"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/_14ssp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/circleImageView" />
+
+                <TextView
+                    android:id="@+id/textV1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:fontFamily="@font/poppins_light"
+                    android:text="jennifer@gmail.com"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12ssp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textV" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_150sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constdr">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/bookings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="@string/bookings"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintStart_toEndOf="@+id/clipboard"
+                        tools:layout_editor_absoluteY="257dp"
+                        app:drawableStartCompat="@drawable/clipboard" />
+
+                    <TextView
+                        android:id="@+id/notifications"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/bell"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_22sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="Notifications"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintStart_toEndOf="@id/bell"
+                        app:layout_constraintTop_toBottomOf="@id/bookings"
+                         />
+
+                    <TextView
+                        android:id="@+id/application"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_22sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Application Preferences"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/chatting" />
+
+                    <TextView
+                        android:id="@+id/account"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="Account"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:drawableStart="@drawable/user"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintStart_toEndOf="@+id/avatar"
+                        app:layout_constraintTop_toBottomOf="@id/application" />
+
+                    <TextView
+                        android:id="@+id/settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_22sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="Settings"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        android:drawableStart="@drawable/settings"
+                        app:layout_constraintStart_toEndOf="@id/setting"
+                        app:layout_constraintTop_toBottomOf="@id/account" />
+
+                    <TextView
+                        android:id="@+id/language"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_22sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="Languages"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        android:drawableStart="@drawable/translate"
+                        app:layout_constraintStart_toEndOf="@id/translate"
+                        app:layout_constraintTop_toBottomOf="@id/settings" />
+
+                    <TextView
+                        android:id="@+id/darktheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_22sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="Dark Theme"
+                        android:drawableStart="@drawable/theme"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintStart_toEndOf="@id/theme"
+                        app:layout_constraintTop_toBottomOf="@id/language" />
+
+                    <TextView
+                        android:id="@+id/handp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_22sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Help &amp; Privacy"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/theme" />
+
+                    <TextView
+                        android:id="@+id/helpandpri"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_22sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="Help &amp; FAQ"
+                        android:drawableStart="@drawable/help"
+                        android:textColor="@color/black"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:textSize="@dimen/_12ssp"
+                        app:layout_constraintTop_toBottomOf="@id/handp" />
+
+                    <TextView
+                        android:id="@+id/pripolicy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_22sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="Privacy Policy"
+                        android:drawableStart="@drawable/privacy"
+                        android:textSize="@dimen/_12ssp"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:textColor="@color/black"
+                        app:layout_constraintTop_toBottomOf="@id/helpandpri" />
+
+                    <TextView
+                        android:id="@+id/termsandcon"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_22sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:text="Terms &amp; Conditions"
+                        android:drawableStart="@drawable/terms"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        android:drawablePadding="@dimen/_5sdp"
+
+                       />
+
+                    <TextView
+                        android:id="@+id/logout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_22sdp"
+                        android:fontFamily="@font/poppins_medium"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:text="Log Out"
+                        android:drawableStart="@drawable/logout"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        android:drawablePadding="@dimen/_5sdp"
+                        app:layout_constraintTop_toBottomOf="@id/termsandcon" />
+
+                </LinearLayout>
+            </ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.navigation.NavigationView>
+
+
+</androidx.drawerlayout.widget.DrawerLayout>

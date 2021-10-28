@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".livedata.View.Activity.ActivitySetting">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="416dp"
+        android:layout_height="49dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/blue" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_baseline_arrow_back_ios_24" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Settings"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/_16ssp" />
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <Button
+        android:id="@+id/btnprofile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="@dimen/_80sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:background="@drawable/buttonbg_setting_activity"
+        android:backgroundTint="@color/blue"
+        android:elevation="@dimen/_8sdp"
+        android:padding="@dimen/_5sdp"
+        android:fontFamily="@font/poppins_medium"
+        android:shadowColor="@color/grey"
+        android:text="Profile"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <Button
+        android:id="@+id/btntheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="@dimen/_80sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:background="@drawable/buttonbg_setting_activity"
+        android:elevation="@dimen/_8sdp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Theme Mode"
+        android:padding="@dimen/_5sdp"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnprofile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnprofile" />
+
+    <Button
+        android:id="@+id/btnlanguage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="@dimen/_80sdp"
+        android:background="@drawable/buttonbg_setting_activity"
+        android:elevation="@dimen/_8sdp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Languages"
+        android:padding="@dimen/_5sdp"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnprofile"
+        app:layout_constraintEnd_toStartOf="@+id/btntheme"
+        app:layout_constraintStart_toEndOf="@+id/btnprofile"
+        app:layout_constraintTop_toTopOf="@+id/btnprofile" />
+
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/containersetting"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/_8sdp"
+        app:layout_constraintTop_toBottomOf="@+id/btnprofile"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

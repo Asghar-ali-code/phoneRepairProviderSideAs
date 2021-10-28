@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Klick to Fix</string>
+    <string name="GPSAlertDialogTitle">Permission Required</string>
+    <string name="GPSAlertDialogMessage">Please Allow Location Permission to use this app</string>
+    <string name="action_allow">Allow</string>
+    <string name="verification">Verification</string>
+    <string name="google_maps_key">AIzaSyDZqQYU8GvFR2-AEqGnpPlMKA9DZv_gyoc</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="title_home">Home</string>
+    <string name="title_review">Review</string>
+    <string name="title_account">Account</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="open">"open"</string>
+    <string name="close">"close"</string>
+    <string name="bookings">Bookings</string>
+</resources>

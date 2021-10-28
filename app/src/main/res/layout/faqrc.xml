@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="@dimen/_8sdp"
+    app:cardCornerRadius="@dimen/_8sdp"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/_14sdp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/innerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_8sdp">
+        <TextView
+            android:id="@+id/tv_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="What do I do if I never receive my order?"
+            android:textSize="@dimen/_13ssp"
+            android:fontFamily="@font/poppins_medium"
+            android:padding="@dimen/_4sdp"
+            android:textColor="@color/black"
+            android:layout_gravity="left"
+            app:layout_constraintTop_toTopOf="@+id/innerView"
+            app:layout_constraintStart_toStartOf="@+id/innerView"
+            app:layout_constraintEnd_toEndOf="@+id/innerView"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_12sdp"
+            />
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_question"
+            app:layout_constraintStart_toStartOf="@+id/innerView"
+            app:layout_constraintEnd_toEndOf="@+id/innerView"
+            android:background="@color/black"
+            android:layout_margin="@dimen/_8sdp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/view"
+            app:layout_constraintStart_toStartOf="@id/innerView"
+            app:layout_constraintEnd_toEndOf="@id/innerView"
+            android:text="Great app for spying purpose, I save tons of money
+by monitoring my staff's usage on the company
+tablets and phones. Blocking personal messages and
+unproductive social media usage is really easy with
+this app. A definite recommend!"
+            android:textSize="@dimen/_9sdp"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_12sdp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

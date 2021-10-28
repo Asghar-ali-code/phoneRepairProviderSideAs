@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="@dimen/_8sdp"
+    app:cardCornerRadius="@dimen/_8sdp"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/_8sdp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/innerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray">
+        <ImageView
+            android:id="@+id/bell"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:src="@drawable/ic_outline_notifications_24"
+            android:background="@color/silver"
+            app:layout_constraintTop_toTopOf="@id/innerview"
+            app:layout_constraintStart_toStartOf="@+id/innerview"
+            android:padding="@dimen/_5sdp"
+            android:layout_margin="@dimen/_8sdp"
+            app:layout_constraintBottom_toBottomOf="@+id/innerview"
+            />
+
+        <TextView
+            android:id="@+id/tvtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/bell"
+            android:text="Booking Status has been Changed"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toTopOf="@+id/innerview"
+            app:layout_constraintEnd_toEndOf="@id/innerview"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:fontFamily="@font/poppins_medium"/>
+
+        <TextView
+            android:id="@+id/tvdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/bell"
+            app:layout_constraintTop_toBottomOf="@+id/tvtitle"
+            android:text="23 August 2021 | 14:45"
+            app:layout_constraintBottom_toBottomOf="@+id/innerview"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_marginStart="@dimen/_5sdp"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
