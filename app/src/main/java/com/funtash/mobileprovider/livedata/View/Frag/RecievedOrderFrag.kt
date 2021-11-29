@@ -2,6 +2,7 @@ package com.funtash.mobileprovider.livedata.View.Frag
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -19,10 +20,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.funtash.mobileprovider.Api.RetrofitClient
 import com.funtash.mobileprovider.R
+import com.funtash.mobileprovider.Utils.CustomLoader
 import com.funtash.mobileprovider.Utils.NoConnectivityException
 import com.funtash.mobileprovider.Utils.Resource
 import com.funtash.mobileprovider.Utils.Utility
 import com.funtash.mobileprovider.databinding.RecievedorderFragBinding
+import com.funtash.mobileprovider.livedata.View.Activity.ActivityOnMap
 import com.funtash.mobileprovider.livedata.View.Adapter.OrderAdapter
 import com.funtash.mobileprovider.livedata.ViewModel.ViewModelLiveData
 import com.funtash.mobileprovider.response.MessageClass
@@ -40,6 +43,8 @@ import org.jsoup.Jsoup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
 class RecievedOrderFrag : Fragment() {
 
@@ -50,6 +55,7 @@ class RecievedOrderFrag : Fragment() {
     private var view: String? = "1"
     private lateinit var viewModelLiveData: ViewModelLiveData
     private var alertDialog: LottieAlertDialog? = null
+    private val dlg=CustomLoader
     private lateinit var binding: RecievedorderFragBinding
 
 
@@ -59,21 +65,27 @@ class RecievedOrderFrag : Fragment() {
         setupViewModel()
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadOrders()
+        //dlg.hideDlg(ctx!!)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = RecievedorderFragBinding.inflate(inflater)
+        binding = RecievedorderFragBinding.inflate(inflater,container,false)
 
 
 
         UI()
-        loadOrders()
         return binding.root
     }
 
     private fun UI() {
+
         Prefs.initPrefs(ctx)
         api_token = Prefs.getString("api_token", "")
         Log.e("api_token", Prefs.getString("api_token", ""))
@@ -85,6 +97,10 @@ class RecievedOrderFrag : Fragment() {
             .setDescription("Please wait a moment!")
             .build()
         alertDialog!!.setCancelable(false)
+
+
+
+        dlg.CustomDlg(ctx!!,"Loading, please wait...")
 
     }
 
@@ -99,15 +115,20 @@ class RecievedOrderFrag : Fragment() {
                         if (it.data?.success == true) {
                             ctx?.let { it1 ->
                                 try {
+                                    Collections.sort(it.data.data)
+                                    { lhs, rhs -> lhs.times.compareTo(rhs.times) }
+
                                     val adapter = OrderAdapter(RecievedOrderFrag(), ctx, it.data, status)
                                     binding.rvOrder.adapter = adapter
                                     Log.e("size", ":" + it.data.data.size)
+                                    dlg.hideDlg(ctx!!)
                                 } catch (e: Exception) {
                                 }
                             }
                             //data class LoginResponse(
                             // Log.e("error",it.data.message.toString())
                         } else if (it.data?.success == false) {
+                            dlg.hideDlg(ctx!!)
                             ctx?.let { it1 ->
                                 Utility.displaySnackBar(
                                     binding.rvOrder, it.data.message,
@@ -118,14 +139,15 @@ class RecievedOrderFrag : Fragment() {
                         }
                     }
                     Resource.Status.ERROR -> {
+                        dlg.hideDlg(ctx!!)
                         Log.e("error", it.message.toString())
-                        ctx?.let { it1 ->
+                       /* ctx?.let { it1 ->
                             Utility.displaySnackBar(
                                 binding.rvOrder,
                                 it.message ?: "",
                                 it1
                             )
-                        }
+                        }*/
 
                     }
 
@@ -133,6 +155,7 @@ class RecievedOrderFrag : Fragment() {
                     }
 
                     Resource.Status.FAILURE -> {
+                        dlg.hideDlg(ctx!!)
                         alertDialog!!.dismiss()
                         ctx?.let { it1 ->
                             Utility.displaySnackBar(
@@ -168,16 +191,16 @@ class RecievedOrderFrag : Fragment() {
 
             Rdialog?.setCancelable(true)
 
-            val name = Rdialog?.findViewById<TextView>(R.id.tvname)
-            val issue = Rdialog?.findViewById<TextView>(R.id.tvissue1)
-            val detail = Rdialog?.findViewById<TextView>(R.id.tvdetails1)
-            val address = Rdialog?.findViewById<TextView>(R.id.tvaddress1)
-            val price = Rdialog?.findViewById<TextView>(R.id.tvprice1)
-            val userimg = Rdialog?.findViewById<CircleImageView>(R.id.iv_user)
+            val name = Rdialog.findViewById<TextView>(R.id.tvname)
+            val issue = Rdialog.findViewById<TextView>(R.id.tvissue1)
+            val detail = Rdialog.findViewById<TextView>(R.id.tvdetails1)
+            val address = Rdialog.findViewById<TextView>(R.id.tvaddress1)
+            val price = Rdialog.findViewById<TextView>(R.id.tvprice1)
+            val userimg = Rdialog.findViewById<CircleImageView>(R.id.iv_user)
             val spdate = Rdialog.findViewById<Spinner>(R.id.sp_date)
 
-            val btnaccept = Rdialog?.findViewById<Button>(R.id.btnaccept)
-            val btnreject = Rdialog?.findViewById<Button>(R.id.btnreject)
+            val btnaccept = Rdialog.findViewById<Button>(R.id.btnaccept)
+            val btnreject = Rdialog.findViewById<Button>(R.id.btnreject)
 
             var arraydate = ArrayList<String>()
             var date = ""
@@ -209,14 +232,14 @@ class RecievedOrderFrag : Fragment() {
 
 
             name.text = orderData.user.name.toString()
-            issue.text = orderData.service.name.en.toString()
-            detail.text = Jsoup.parse(orderData.service.description.en.toString()).text()
+            issue.text = orderData.service[0].name.en.toString()
+            detail.text = Jsoup.parse(orderData.service[0].description.en.toString()).text()
             address.text = orderData.address.toString()
             if(orderData.payment==null){
                 price.text = "Pending"
             }
             else
-                price.text = orderData.service.discount_price.toString()+" ( "+orderData.payment.amount+" paid in andvance)"
+                price.text = orderData.service[0].discount_price.toString()+" ( "+orderData.payment.amount+" paid in andvance)"
 
             btnaccept.setOnClickListener {
                 var  successDlg : LottieAlertDialog =
@@ -277,9 +300,9 @@ class RecievedOrderFrag : Fragment() {
                         .build()
                 successDlg.show()
             }
-            if(orderData.user.has_media){
+            if(orderData.user.profile_pic!=null){
                 Glide.with(context)
-                    .load(orderData.user.media[0].url) //.placeholder(R.drawable.banner)
+                    .load(orderData.user.profile_pic) //.placeholder(R.drawable.banner)
                     .into(userimg)
             }
 
@@ -304,7 +327,7 @@ class RecievedOrderFrag : Fragment() {
                     Log.e("response", "" + response.body())
                     if (response.body()?.success==true) {
                         try {
-                            var  successDlg : LottieAlertDialog =
+                            val successDlg : LottieAlertDialog =
                                 LottieAlertDialog.Builder(context, DialogTypes.TYPE_SUCCESS)
                                 .setTitle("Order")
                                 .setDescription(response.body()?.message.toString())
@@ -315,8 +338,11 @@ class RecievedOrderFrag : Fragment() {
                                 .setPositiveListener(object: ClickListener {
                                     override fun onClick(dialog: LottieAlertDialog) {
                                         // This is the usage same instance of view
+                                        val intent= Intent(context,ActivityOnMap::class.java)
+                                        intent.putExtra("o_id",oid)
+                                        context.startActivity(intent)
                                         dialog.dismiss()
-                                       reloadFrag()
+                                        alertDialog?.dismiss()
                                     }
                                 })
                                 .build()
@@ -397,13 +423,15 @@ class RecievedOrderFrag : Fragment() {
 
     private fun reloadFrag() {
         // Reload current fragment
-        var frg: Fragment? = RecievedOrderFrag()
-        frg = fragmentManager?.findFragmentById(R.id.nav_home)
+       /* var frg: Fragment? = RecievedOrderFrag()
+        frg = fragmentManager?.findFragmentById(R.id.ordercontainer)
         val ft: androidx.fragment.app.FragmentTransaction? = fragmentManager?.beginTransaction()
         ft?.detach(frg!!)
         ft?.attach(frg!!)
         ft?.commit()
-        alertDialog?.dismiss()
+        alertDialog?.dismiss()*/
+
+        /*(parentFragment as HomeFragment).acceptedFrag()*/
     }
 
 }

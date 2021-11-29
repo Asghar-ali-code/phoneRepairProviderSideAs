@@ -83,11 +83,32 @@ interface ApiInterface {
         @Field("booking_id") booking_id: String
     ): Call<MessageClass>
 
+    @FormUrlEncoded
+    @POST("provider/post/chat")
+    fun post_chat(
+        @Header("apitoken") token: String,
+        @Field("receiver_id") receiver_id:String,
+        @Field("message") message:String,
+        @Field("order_id") order_id:String
+
+    ): Call<MessageClass>
+
+    @FormUrlEncoded
+    @POST("provider/updateBooking")
+    fun provider_updateBooking(
+        @Field("e_service") e_service:String,
+        @Field("booking_id") booking_id:String
+    ): Call<MessageClass>
 
     @GET("provider/totalearnings")
     suspend fun provider_totalearnings(
         @Header("apitoken") apitoken:String
     ): Response<EarningClass>
+
+    @GET("services")
+    suspend fun services(
+        @Query("category_id") category_id:String
+    ): Response<ServiceClass>
 
     @GET("provider/orders")
     suspend fun provider_orders(
@@ -125,7 +146,12 @@ interface ApiInterface {
 
     @GET("provider/orderDetail")
     suspend fun booking_details(
-      /*  @Header("apitoken") token:String,*/
         @Query("order_id") order_id:String
     ): Response<OrderDetail>
+
+    @GET("provider/get/chat")
+    suspend fun chat_list(
+        @Header("apitoken") token:String,
+        @Query("order_id") order_id:String
+    ): Response<ChatClass>
 }

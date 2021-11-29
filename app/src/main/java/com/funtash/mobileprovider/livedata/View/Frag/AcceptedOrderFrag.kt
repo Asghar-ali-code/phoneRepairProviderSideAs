@@ -1,7 +1,5 @@
 package com.funtash.mobileprovider.livedata.View.Frag
 
-import android.app.Dialog
-import android.app.FragmentTransaction
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -10,41 +8,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.funtash.mobileprovider.Api.RetrofitClient
-import com.funtash.mobileprovider.R
-import com.funtash.mobileprovider.Utils.GpsTracker
-import com.funtash.mobileprovider.Utils.NoConnectivityException
-import com.funtash.mobileprovider.Utils.Resource
-import com.funtash.mobileprovider.Utils.Utility
-import com.funtash.mobileprovider.databinding.FragmentHomeBinding
+import com.funtash.mobileprovider.Utils.*
 import com.funtash.mobileprovider.databinding.RecievedorderFragBinding
 import com.funtash.mobileprovider.livedata.View.Adapter.OrderAdapter
 import com.funtash.mobileprovider.livedata.ViewModel.ViewModelLiveData
-import com.funtash.mobileprovider.response.MessageClass
-import com.funtash.mobileprovider.response.OrderData
 import com.funtash.mobilerepairinguserapp.Api.ApiClient
 import com.funtash.mobilerepairinguserapp.Api.ApiHelper
-import com.funtash.mobilerepairinguserapp.Api.ApiInterface
 import com.funtash.mobilerepairinguserapp.livedata.ViewModel.ViewModelFactoryLiveData
-import com.labters.lottiealertdialoglibrary.ClickListener
 import com.labters.lottiealertdialoglibrary.DialogTypes
 import com.labters.lottiealertdialoglibrary.LottieAlertDialog
 import com.pixplicity.easyprefs.library.Prefs
-import de.hdodenhof.circleimageview.CircleImageView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import java.util.*
 
 class AcceptedOrderFrag : Fragment() {
 
@@ -55,6 +33,7 @@ class AcceptedOrderFrag : Fragment() {
     private var view: String? = "1"
     private lateinit var viewModelLiveData: ViewModelLiveData
     private var alertDialog: LottieAlertDialog? = null
+    private val dlg= CustomLoader
     private lateinit var binding: RecievedorderFragBinding
 
 
@@ -64,17 +43,19 @@ class AcceptedOrderFrag : Fragment() {
         setupViewModel()
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadOrders()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = RecievedorderFragBinding.inflate(inflater)
-
-
+        binding = RecievedorderFragBinding.inflate(inflater,container,false)
 
         UI()
-        loadOrders()
         return binding.root
     }
 
@@ -91,6 +72,7 @@ class AcceptedOrderFrag : Fragment() {
             .build()
         alertDialog!!.setCancelable(false)
 
+        dlg.CustomDlg(ctx!!,"Loading, please wait...")
     }
 
     private fun loadOrders() {
@@ -104,10 +86,15 @@ class AcceptedOrderFrag : Fragment() {
                         if (it.data?.success == true) {
                             ctx?.let { it1 ->
                                 try {
+                                    Collections.sort(it.data.data)
+                                    { lhs, rhs -> lhs.times.compareTo(rhs.times) }
+
                                     val adapter = OrderAdapter(AcceptedOrderFrag(), ctx, it.data, status)
                                     binding.rvOrder.adapter = adapter
                                     Log.e("size", ":" + it.data.data.size)
+                                    dlg.hideDlg(ctx!!)
                                 } catch (e: Exception) {
+                                    dlg.hideDlg(ctx!!)
                                 }
                             }
                             //data class LoginResponse(
@@ -119,18 +106,20 @@ class AcceptedOrderFrag : Fragment() {
                                     it1
                                 )
                             }
+                            dlg.hideDlg(ctx!!)
 
                         }
                     }
                     Resource.Status.ERROR -> {
                         Log.e("error", it.message.toString())
-                        ctx?.let { it1 ->
+                       /* ctx?.let { it1 ->
                             Utility.displaySnackBar(
                                 binding.rvOrder,
                                 it.message ?: "",
                                 it1
                             )
-                        }
+                        }*/
+                        dlg.hideDlg(ctx!!)
 
                     }
 
@@ -146,7 +135,7 @@ class AcceptedOrderFrag : Fragment() {
                                 it1
                             )
                         }
-
+                        dlg.hideDlg(ctx!!)
                     }
                 }
 

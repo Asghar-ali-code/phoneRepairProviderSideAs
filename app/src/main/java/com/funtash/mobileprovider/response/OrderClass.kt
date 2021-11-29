@@ -16,7 +16,7 @@ data class OrderData(
     val lat: String,
     val payment: Payment,
     val payment_id: Int,
-    val service: Service,
+    val service: List<Service>,
     val times: String,
     val user: User,
     val user_id: Int,

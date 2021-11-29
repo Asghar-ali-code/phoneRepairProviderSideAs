@@ -18,13 +18,19 @@ import com.funtash.mobileprovider.livedata.View.Frag.HomeFragment;
 import com.funtash.mobileprovider.response.OrderClass;
 import com.funtash.mobileprovider.response.Revie;
 import com.funtash.mobileprovider.response.ReviewClass;
+import com.funtash.mobileprovider.response.Service;
 
 import org.jetbrains.annotations.NotNull;
+import org.jsoup.Jsoup;
+
+import java.util.ArrayList;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHolder> {
 
     private Context context;
     private ReviewClass list;
+    private String status,sname="";
+    private ArrayList<Service> list2=new ArrayList<>();
 
     public ReviewAdapter(Context context, ReviewClass list) {
         this.context = context;
@@ -35,7 +41,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     @NotNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-
         View view= LayoutInflater.from(context).inflate(R.layout.review_rc,parent,false);
 
         return new MyViewHolder(view);
@@ -44,8 +49,26 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull @NotNull MyViewHolder holder, int position) {
         try {
+
+            if(list.getData().getRevie_list().get(position).getService()!=null &&
+                    list.getData().getRevie_list().get(position).getService().size()!=0) {
+                list2.clear();
+                for (Service i : list.getData().getRevie_list().get(position).getService()) {
+                    if (sname.equals(""))
+                        sname = i.getName().getEn().toString();
+                    else
+                        sname = sname + "," + i.getName().getEn().toString();
+                }
+                holder.tvservice.setText(sname);
+
+            }
+            else {
+                sname="Don't Know the Issue";
+                holder.tvservice.setText("Don't Know the Issue");
+            }
+
             holder.tvname.setText(list.getData().getRevie_list().get(position).getUser().getName().toString());
-            holder.tvservice.setText(list.getData().getRevie_list().get(position).getService().getName().getEn().toString());
+            //holder.tvservice.setText(list.getData().getRevie_list().get(position).getService().get(0).getName().getEn().toString());
             holder.tvcomment.setText(list.getData().getRevie_list().get(position).getComment().toString());
             holder.tvrating.setText(String.valueOf(list.getData().getRevie_list().get(position).getRate()));
 
@@ -63,6 +86,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     public int getItemCount() {
         return list.getData().getRevie_list().size();
     }
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 

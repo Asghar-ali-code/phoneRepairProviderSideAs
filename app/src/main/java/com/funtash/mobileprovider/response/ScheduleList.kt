@@ -13,5 +13,6 @@ data class Datas(
     val id: Int,
     val provider_id: Int,
     val start_day: String,
-    val updated_at: String
+    val updated_at: String,
+    val store_time:String
 )

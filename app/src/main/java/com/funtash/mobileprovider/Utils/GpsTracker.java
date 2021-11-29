@@ -40,10 +40,10 @@ public class GpsTracker extends Service implements LocationListener
     double longitude;
 
     // Konum guncellemesi gerektirecek minimum degisim miktari
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 100; // metre
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1000; // metre
 
     // Konum guncellemesi gerektirecek minimum sure miktari
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // dakika
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60; // dakika
 
     // LocationManager nesnesi
     protected LocationManager locationManager;

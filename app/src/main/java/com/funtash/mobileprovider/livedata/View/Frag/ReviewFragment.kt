@@ -10,22 +10,23 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.funtash.mobileprovider.Utils.CustomLoader
 import com.funtash.mobileprovider.Utils.Resource
 import com.funtash.mobileprovider.Utils.Utility
 import com.funtash.mobileprovider.databinding.ReviewsFragBinding
-import com.funtash.mobileprovider.livedata.View.Adapter.NotificationAdapter
 import com.funtash.mobileprovider.livedata.View.Adapter.ReviewAdapter
 import com.funtash.mobileprovider.livedata.ViewModel.ViewModelLiveData
 import com.funtash.mobilerepairinguserapp.Api.ApiClient
 import com.funtash.mobilerepairinguserapp.Api.ApiHelper
 import com.funtash.mobilerepairinguserapp.livedata.ViewModel.ViewModelFactoryLiveData
 import com.pixplicity.easyprefs.library.Prefs
+import java.util.*
 
 class ReviewFragment : Fragment() {
     var ctx: Context? = null
     private var api_token: String? = null
     private lateinit var viewModelLiveData: ViewModelLiveData
-
+    private val dlg= CustomLoader
     private  lateinit var binding :ReviewsFragBinding
 
     override fun onAttach(context: Context) {
@@ -38,7 +39,7 @@ class ReviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-       binding= ReviewsFragBinding.inflate(inflater)
+       binding= ReviewsFragBinding.inflate(inflater,container,false)
 
         UI()
         setupViewModel()
@@ -55,6 +56,9 @@ class ReviewFragment : Fragment() {
 
         binding.rvRating.setHasFixedSize(true)
         binding.rvRating.layoutManager= LinearLayoutManager(ctx)
+
+        dlg.CustomDlg(ctx!!,"Loading, please wait...")
+
     }
 
     private fun loadreview() {
@@ -66,13 +70,19 @@ class ReviewFragment : Fragment() {
                         if (it.data?.success == true) {
                             ctx?.let { it1 ->
                                 try {
-                                    binding.reviewScore.text=it.data.data.review_avg.toString()
+
+                                    binding.reviewScore.text=it.data.data.review_avg.toFloat().toString()
                                     binding.ratingBar.rating=it.data.data.review_avg.toFloat()
+
                                     binding.tvReview.text="Total Reviews("+it.data.data.revie_list.size+")"
 
+                                    //Collections.reverse(it.data.data.revie_list)
                                     val adapter = ReviewAdapter(ctx, it.data)
                                     binding.rvRating.adapter = adapter
+
+                                    dlg.hideDlg(ctx!!)
                                 } catch (e: Exception) {
+                                    dlg.hideDlg(ctx!!)
                                 }
                             }
                             //data class LoginResponse(
@@ -84,18 +94,20 @@ class ReviewFragment : Fragment() {
                                     it1
                                 )
                             }
+                            dlg.hideDlg(ctx!!)
 
                         }
                     }
                     Resource.Status.ERROR -> {
                         Log.e("error", it.message.toString())
-                        ctx?.let { it1 ->
+                       /* ctx?.let { it1 ->
                             Utility.displaySnackBar(
                                 binding.root,
                                 it.message ?: "",
                                 it1
                             )
-                        }
+                        }*/
+                        dlg.hideDlg(ctx!!)
 
                     }
 
@@ -110,7 +122,7 @@ class ReviewFragment : Fragment() {
                                 it1
                             )
                         }
-
+                        dlg.hideDlg(ctx!!)
                     }
                 }
 
@@ -120,7 +132,6 @@ class ReviewFragment : Fragment() {
 
 
     private fun setupViewModel() {
-
         viewModelLiveData = ViewModelProviders.of(
             this,
             ViewModelFactoryLiveData(ApiHelper(ApiClient.getApi(requireActivity())!!))

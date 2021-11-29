@@ -23,10 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.funtash.mobileprovider.Api.RetrofitClient
 import com.funtash.mobileprovider.R
-import com.funtash.mobileprovider.Utils.GpsTracker
-import com.funtash.mobileprovider.Utils.NoConnectivityException
-import com.funtash.mobileprovider.Utils.Resource
-import com.funtash.mobileprovider.Utils.Utility
+import com.funtash.mobileprovider.Utils.*
 import com.funtash.mobileprovider.databinding.FragmentHomeBinding
 import com.funtash.mobileprovider.databinding.RecievedorderFragBinding
 import com.funtash.mobileprovider.livedata.View.Adapter.OrderAdapter
@@ -45,6 +42,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class PhoneCheckOrderFrag : Fragment() {
 
@@ -55,6 +53,7 @@ class PhoneCheckOrderFrag : Fragment() {
     private var view: String? = "1"
     private lateinit var viewModelLiveData: ViewModelLiveData
     private var alertDialog: LottieAlertDialog? = null
+    private val dlg= CustomLoader
     private lateinit var binding: RecievedorderFragBinding
 
 
@@ -69,7 +68,7 @@ class PhoneCheckOrderFrag : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = RecievedorderFragBinding.inflate(inflater)
+        binding = RecievedorderFragBinding.inflate(inflater,container,false)
 
 
 
@@ -91,6 +90,10 @@ class PhoneCheckOrderFrag : Fragment() {
             .build()
         alertDialog!!.setCancelable(false)
 
+        dlg.CustomDlg(ctx!!,"Loading, please wait...")
+        dlg.showDlg(ctx!!)
+
+
     }
 
     private fun loadOrders() {
@@ -104,9 +107,13 @@ class PhoneCheckOrderFrag : Fragment() {
                         if (it.data?.success == true) {
                             ctx?.let { it1 ->
                                 try {
+                                    Collections.sort(it.data.data)
+                                    { lhs, rhs -> lhs.times.compareTo(rhs.times) }
+
                                     val adapter = OrderAdapter(PhoneCheckOrderFrag(), ctx, it.data, status)
                                     binding.rvOrder.adapter = adapter
                                     Log.e("size", ":" + it.data.data.size)
+                                    dlg.hideDlg(ctx!!)
                                 } catch (e: Exception) {
                                 }
                             }
@@ -119,18 +126,20 @@ class PhoneCheckOrderFrag : Fragment() {
                                     it1
                                 )
                             }
+                            dlg.hideDlg(ctx!!)
 
                         }
                     }
                     Resource.Status.ERROR -> {
                         Log.e("error", it.message.toString())
-                        ctx?.let { it1 ->
+                        /*ctx?.let { it1 ->
                             Utility.displaySnackBar(
                                 binding.root,
                                 it.message ?: "",
                                 it1
                             )
-                        }
+                        }*/
+                        dlg.hideDlg(ctx!!)
 
                     }
 
@@ -146,6 +155,7 @@ class PhoneCheckOrderFrag : Fragment() {
                                 it1
                             )
                         }
+                        dlg.hideDlg(ctx!!)
 
                     }
                 }

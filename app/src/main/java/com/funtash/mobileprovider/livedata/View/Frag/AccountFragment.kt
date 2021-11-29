@@ -11,9 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.funtash.mobileprovider.R
 import com.funtash.mobileprovider.databinding.AccountFragBinding
 import com.funtash.mobileprovider.databinding.FragmentDashboardBinding
+import com.funtash.mobileprovider.livedata.View.Activity.ActivityHome
 import com.funtash.mobileprovider.livedata.View.Activity.ActivityLogin
+import com.funtash.mobileprovider.livedata.View.Activity.ActivityNotifaction
 import com.funtash.mobileprovider.livedata.View.Activity.ActivitySetting
 import com.pixplicity.easyprefs.library.Prefs
 
@@ -33,7 +36,7 @@ class AccountFragment :Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding= AccountFragBinding.inflate(inflater)
+        binding= AccountFragBinding.inflate(inflater,container,false)
 
         initUI()
         clicks()
@@ -71,6 +74,29 @@ class AccountFragment :Fragment() {
         }
         binding.profile1.setOnClickListener {
             startActivity(Intent(ctx,ActivitySetting::class.java))
+        }
+        binding.bookings.setOnClickListener {
+            startActivity(Intent(ctx,ActivityHome::class.java))
+            activity?.finish()
+        }
+
+        binding.notifications.setOnClickListener {
+            startActivity(Intent(ctx,ActivityNotifaction::class.java))
+        }
+
+        binding.settings.setOnClickListener {
+            startActivity(Intent(ctx,ActivitySetting::class.java))
+        }
+
+        binding.translate.setOnClickListener {
+            val intent= Intent(ctx,ActivitySetting::class.java)
+            intent.putExtra("type","lang")
+            startActivity(intent)
+        }
+        binding.themes.setOnClickListener {
+            val intent= Intent(ctx,ActivitySetting::class.java)
+            intent.putExtra("type","theme")
+            startActivity(intent)
         }
     }
 

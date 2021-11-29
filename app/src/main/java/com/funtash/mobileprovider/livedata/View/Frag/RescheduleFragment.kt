@@ -26,10 +26,7 @@ import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.funtash.mobileprovider.Api.RetrofitClient
 import com.funtash.mobileprovider.R
-import com.funtash.mobileprovider.Utils.NoConnectivityException
-import com.funtash.mobileprovider.Utils.Resource
-import com.funtash.mobileprovider.Utils.SwipeHelper
-import com.funtash.mobileprovider.Utils.Utility
+import com.funtash.mobileprovider.Utils.*
 import com.funtash.mobileprovider.databinding.ReschuldeFragBinding
 import com.funtash.mobileprovider.livedata.View.Activity.ActivityLogin
 import com.funtash.mobileprovider.livedata.View.Adapter.ScheduleAdapter
@@ -54,8 +51,10 @@ import kotlin.collections.ArrayList
 class RescheduleFragment : Fragment() {
     var ctx: Context? = null
     private var api_token: String? = null
+    private var o_id: String? = null
     private var alertDialog: LottieAlertDialog? = null
     private var list:ScheduleList?=null
+    private val dlg= CustomLoader
     private lateinit var viewModelLiveData: ViewModelLiveData
     private  lateinit var binding :ReschuldeFragBinding
 
@@ -69,7 +68,7 @@ class RescheduleFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-       binding= ReschuldeFragBinding.inflate(inflater)
+       binding= ReschuldeFragBinding.inflate(inflater,container,false)
 
         UI()
         clicks()
@@ -85,12 +84,15 @@ class RescheduleFragment : Fragment() {
     private fun UI() {
         Prefs.initPrefs(ctx)
         api_token = Prefs.getString("api_token", "")
+        o_id = Prefs.getString("o_id", "")
 
         alertDialog  = LottieAlertDialog.Builder(context, DialogTypes.TYPE_LOADING)
             .setTitle("Loading")
             .setDescription("Please wait a moment!")
             .build()
         alertDialog!!.setCancelable(false)
+
+        dlg.CustomDlg(ctx!!,"Loading, please wait...")
 
 
         binding.rvSlots.setHasFixedSize(true)
@@ -186,6 +188,7 @@ class RescheduleFragment : Fragment() {
 
             }catch (e:Exception){}
         }
+
     }
 
     private fun addSchedule(time: String, day: String) {
@@ -291,6 +294,7 @@ class RescheduleFragment : Fragment() {
         })
 
     }
+
     private fun loadschedules() {
         viewModelLiveData.getschedule(api_token.toString())
         activity?.let {
@@ -305,7 +309,9 @@ class RescheduleFragment : Fragment() {
                                     binding.rvSlots.adapter = adapter
                                     val adapter2=TimeAdapter(ctx,it.data)
                                     binding.rvTimes.adapter=adapter2
+                                    dlg.hideDlg(ctx!!)
                                 } catch (e: Exception) {
+                                    dlg.hideDlg(ctx!!)
                                 }
                             }
                             //data class LoginResponse(
@@ -317,17 +323,19 @@ class RescheduleFragment : Fragment() {
                                     it1
                                 )
                             }
+                            dlg.hideDlg(ctx!!)
                         }
                     }
                     Resource.Status.ERROR -> {
                         Log.e("error", it.message.toString())
-                        ctx?.let { it1 ->
+                        /*ctx?.let { it1 ->
                             Utility.displaySnackBar(
                                 binding.root,
                                 it.message ?: "",
                                 it1
                             )
-                        }
+                        }*/
+                        dlg.hideDlg(ctx!!)
 
                     }
 
@@ -342,7 +350,7 @@ class RescheduleFragment : Fragment() {
                                 it1
                             )
                         }
-
+                        dlg.hideDlg(ctx!!)
                     }
                 }
 

@@ -29,7 +29,7 @@
             android:padding="@dimen/_5sdp">
 
             <TextView
-                android:id="@+id/tvearning"
+                android:id="@+id/tvbooking"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
@@ -43,7 +43,7 @@
                 android:layout_marginTop="@dimen/_4sdp"
                 android:fontFamily="@font/poppins_medium"
                 android:gravity="center"
-                android:text="Total Earning"
+                android:text="Total Booking"
                 android:textSize="@dimen/_10ssp" />
         </LinearLayout>
 
@@ -72,7 +72,7 @@
             android:padding="@dimen/_5sdp">
 
             <TextView
-                android:id="@+id/tvbooking"
+                android:id="@+id/tvnewbooking"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
@@ -86,7 +86,7 @@
                 android:layout_marginTop="@dimen/_4sdp"
                 android:fontFamily="@font/poppins_medium"
                 android:gravity="center"
-                android:text="Total Bookings"
+                android:text="New Booking"
                 android:textSize="@dimen/_10ssp" />
         </LinearLayout>
 
@@ -115,7 +115,7 @@
             android:padding="@dimen/_5sdp">
 
             <TextView
-                android:id="@+id/tvcustomer"
+                android:id="@+id/tvactive"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
@@ -129,7 +129,7 @@
                 android:layout_marginTop="@dimen/_4sdp"
                 android:fontFamily="@font/poppins_medium"
                 android:gravity="center"
-                android:text="Total Customers"
+                android:text="Active Booking"
                 android:textSize="@dimen/_10ssp" />
         </LinearLayout>
 
@@ -256,13 +256,7 @@
 
     </HorizontalScrollView>
 
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/gif_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/ordercontainer"
         android:layout_width="match_parent"

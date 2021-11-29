@@ -16,19 +16,23 @@ class ViewModelLiveData(private val loginRepoLiveData: RepoLiveData) : ViewModel
     //cached
     private val _earning = MutableLiveData<Resource<EarningClass>>()
     private val _order = MutableLiveData<Resource<OrderClass>>()
+    private val _service = MutableLiveData<Resource<ServiceClass>>()
     private val _noti = MutableLiveData<Resource<NotificationClass>>()
     private val _review = MutableLiveData<Resource<ReviewClass>>()
     private val _schedule = MutableLiveData<Resource<ScheduleList>>()
     private val _bookingdetails = MutableLiveData<Resource<OrderDetail>>()
+    private val _chatlist = MutableLiveData<Resource<ChatClass>>()
 
 
     //public
     val earning : LiveData<Resource<EarningClass>> get() =  _earning
     val order : LiveData<Resource<OrderClass>> get() =  _order
+    val service : LiveData<Resource<ServiceClass>> get() =  _service
     val noti : LiveData<Resource<NotificationClass>> get() =  _noti
     val review : LiveData<Resource<ReviewClass>> get() =  _review
     val schedule : LiveData<Resource<ScheduleList>> get() =  _schedule
     val bookingdetails : LiveData<Resource<OrderDetail>> get() =  _bookingdetails
+    val chatlist : LiveData<Resource<ChatClass>> get() =  _chatlist
 
 
 
@@ -38,6 +42,17 @@ class ViewModelLiveData(private val loginRepoLiveData: RepoLiveData) : ViewModel
         viewModelScope.launch {
             try {
                 _earning.value = loginRepoLiveData.provider_totalearnings(apitoken)
+            }
+            catch (exception: Exception){
+
+            }
+        }
+
+    //load services
+    fun getservices(cid:String) =
+        viewModelScope.launch {
+            try {
+                _service.value = loginRepoLiveData.service(cid)
             }
             catch (exception: Exception){
 
@@ -97,4 +112,17 @@ class ViewModelLiveData(private val loginRepoLiveData: RepoLiveData) : ViewModel
 
             }
         }
+
+
+    //load chatlist
+    fun chatlist(api_token:String,oid:String) =
+        viewModelScope.launch {
+            try {
+                _chatlist.value = loginRepoLiveData.chat_list(api_token,oid)
+            }
+            catch (exception: Exception){
+
+            }
+        }
+
 }

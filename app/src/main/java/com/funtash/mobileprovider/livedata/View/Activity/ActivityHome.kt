@@ -41,7 +41,7 @@ class ActivityHome : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
 
-    @SuppressLint("WrongConstant")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityHomeBinding.inflate(layoutInflater)
@@ -57,6 +57,8 @@ class ActivityHome : AppCompatActivity() {
                 HomeFragment()
             ).commit()
         }
+        else
+            Log.e("savedinstance","notnull")
 
 
         binding.ivDrawer.setOnClickListener {
@@ -148,11 +150,6 @@ class ActivityHome : AppCompatActivity() {
             alert.show()
 
         }
-
-        binding.settings.setOnClickListener {
-            startActivity(Intent(this,ActivitySetting::class.java))
-        }
-
         binding.notifications.setOnClickListener {
             startActivity(Intent(this,ActivityNotifaction::class.java))
         }
@@ -165,7 +162,57 @@ class ActivityHome : AppCompatActivity() {
             startActivity(Intent(this,ActivityNotifaction::class.java))
         }
 
+        binding.settings.setOnClickListener {
+            startActivity(Intent(this,ActivitySetting::class.java))
+        }
+
+        binding.language.setOnClickListener {
+            val intent= Intent(this,ActivitySetting::class.java)
+            intent.putExtra("type","lang")
+            startActivity(intent)
+        }
+        binding.darktheme.setOnClickListener {
+            val intent= Intent(this,ActivitySetting::class.java)
+            intent.putExtra("type","theme")
+            startActivity(intent)
+        }
+
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        Log.e("onrestart","onrestart")
+        /*startActivity(Intent(this,HomeActivity::class.java))
+        finish()*/
+    }
 
+    override fun onStart() {
+        super.onStart()
+        Log.e("onstart","onstart")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.e("onstop","onstop")
+    }
+    override fun onPause() {
+        super.onPause()
+        Log.e("onpause","onpause")
+    }
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        finishAffinity()
+    }
+
+    override fun onBackPressed() {
+        if(binding.drawer.isDrawerOpen(GravityCompat.START)){
+            binding.drawer.closeDrawers()
+        }
+        else
+            finishAffinity()
+    }
 }

@@ -5,8 +5,8 @@ data class Revie(
     val duration: Int,
     val e_service: String,
     val id: Int,
-    val rate: Int,
-    val service: Service,
+    val rate: Float,
+    val service: List<Service>,
     val user: User,
     val user_id: Int
 )

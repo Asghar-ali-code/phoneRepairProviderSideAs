@@ -20,7 +20,7 @@ data class DataO(
     val payment: Payment,
     val payment_id: Int,
     val provider: Provider,
-    val service: Service,
+    val service: List<Service>,
     val times: String,
     val user: User,
     val user_id: Int

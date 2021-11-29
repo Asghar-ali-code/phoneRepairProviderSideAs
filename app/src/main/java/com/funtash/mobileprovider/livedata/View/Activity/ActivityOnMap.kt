@@ -8,25 +8,32 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.location.Geocoder
 import android.location.Location
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.funtash.mobileprovider.Api.RetrofitClient
 import com.funtash.mobileprovider.R
-import com.funtash.mobileprovider.Utils.GpsTracker
-import com.funtash.mobileprovider.Utils.NoConnectivityException
+import com.funtash.mobileprovider.Utils.*
 import com.funtash.mobileprovider.Utils.Route.DirectionFinder
 import com.funtash.mobileprovider.Utils.Route.DirectionFinderListener
 import com.funtash.mobileprovider.Utils.Route.Route
-import com.funtash.mobileprovider.Utils.Utility
 import com.funtash.mobileprovider.databinding.ActivityOnMapBinding
+import com.funtash.mobileprovider.livedata.ViewModel.ViewModelLiveData
+import com.funtash.mobileprovider.response.OrderDetail
 import com.funtash.mobileprovider.response.OrderStatus
+import com.funtash.mobilerepairinguserapp.Api.ApiClient
+import com.funtash.mobilerepairinguserapp.Api.ApiHelper
 import com.funtash.mobilerepairinguserapp.Api.ApiInterface
+import com.funtash.mobilerepairinguserapp.livedata.ViewModel.ViewModelFactoryLiveData
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
@@ -43,16 +50,20 @@ import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.UnsupportedEncodingException
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ActivityOnMap : AppCompatActivity(), OnMapReadyCallback,
     GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
     DirectionFinderListener {
 
-    private var o_id: String? = null
+    private var o_id:String?=null
+    private var u_id:String?=null
+    private var p_img:String?=null
     private var status: String? = "on the way"
     private var api_token: String? = null
     private var address: String? = null
@@ -65,7 +76,10 @@ class ActivityOnMap : AppCompatActivity(), OnMapReadyCallback,
     private var destinationMarkers: List<Marker> = ArrayList()
     private var polylinePaths: List<Polyline> = ArrayList()
 
+    private val dlg= CustomLoader
     private var alertDialog: LottieAlertDialog? = null
+
+    private lateinit var viewModelLiveData: ViewModelLiveData
     private lateinit var binding: ActivityOnMapBinding
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -73,36 +87,106 @@ class ActivityOnMap : AppCompatActivity(), OnMapReadyCallback,
         super.onCreate(savedInstanceState)
         binding = ActivityOnMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         initView()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initView() {
         Prefs.initPrefs(this)
+        o_id = intent.getStringExtra("o_id")
 
         initPrgDlg()
         handleClick()
-        showData()
         setupGoogleApiClient()
+        setupViewModel()
+        loadData()
+    }
+
+    private fun setupViewModel() {
+        viewModelLiveData = ViewModelProviders.of(
+            this,
+            ViewModelFactoryLiveData(ApiHelper(ApiClient.getApi(this)!!))
+        ).get(ViewModelLiveData::class.java)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun showData() {
-        try {
-            binding.tvname.text = intent.getStringExtra("p_name")
-            binding.tvservice.text = intent.getStringExtra("s_name")
-            binding.tvaddress.text = intent.getStringExtra("p_Add")
-            val strdate = parseDateToddMMyyyy(intent.getStringExtra("date"))
-            if (strdate != null) {
-                binding.tvdate.text = strdate.split("-")[1]
-                binding.tvtime.text = strdate.split("-")[0]
+    private fun loadData() {
+        viewModelLiveData.getbooking_details(api_token.toString(), o_id.toString())
+        viewModelLiveData.bookingdetails.observe(this, Observer {
+
+            when (it.status) {
+
+                Resource.Status.SUCCESS -> {
+                    if (it.data?.success == true) {
+                        try {
+                            showData(it.data)
+
+                        } catch (e: UnsupportedEncodingException) {
+                            e.printStackTrace()
+                            dlg.hideDlg(this)
+                        }
+                    } else if (it.data?.success == false) {
+                        dlg.hideDlg(this)
+                    }
+                }
+                Resource.Status.ERROR -> {
+                    Log.e("error", it.message.toString())
+                    dlg.hideDlg(this)
+
+                }
+
+                Resource.Status.LOADING -> {
+                }
+
+                Resource.Status.FAILURE -> {
+                    dlg.hideDlg(this)
+                    Utility.displaySnackBar(
+                        binding.root,
+                        it.message ?: "",
+                        applicationContext
+                    )
+
+                }
             }
-            binding.tvno.text = intent.getStringExtra("p_no")
-            o_id = intent.getStringExtra("o_id")
+
+        })
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun showData(data: OrderDetail) {
+        try {
+            DirectionFinder(
+                this, data.data.address.toString(),address.toString()
+            ).execute()
+
+            var price=0
+            var sname=""
+            for (i in data.data.service) {
+                if (sname == "")
+                    sname = i.name.en.toString()
+                else
+                    sname = sname + "," + i.name.en.toString()
+                price += i.discount_price
+            }
+
+            binding.tvname.text = data.data.user.name.toString()
+            binding.tvservice.text =sname
+            binding.tvaddress.text = data.data.address.toString()
+            binding.tvno.text=data.data.user.phone_number.toString()
+
+            if(data.data.payment==null && data.data.booking_status.equals("accepted")) {
+                binding.tvPstatus.text = "Pending: $$price"
+            }
+            else {
+                binding.tvPstatus.text = "Paid: $ "+data.data.payment.amount
+            }
+
+            u_id = data.data.user.id.toString()
+            p_img = data.data.user.profile_pic.toString()
             binding.tvorderno.text = "#$o_id"
-            o_id = intent.getStringExtra("o_id")
-            binding.tvstatus.text = intent.getStringExtra("status")
-            binding.tvname.text = intent.getStringExtra("p_name")
+            binding.tvstatus.text = data.data.booking_status.toString()
 
             if (binding.tvstatus.text.toString() == "accepted") {
                 status = "on the way"
@@ -117,16 +201,27 @@ class ActivityOnMap : AppCompatActivity(), OnMapReadyCallback,
                 status = "completed"
                 binding.btnaccept.text = status
             }
+            else{
+                binding.btnaccept.visibility= View.GONE
+                if(binding.tvPstatus.text.toString().equals("completed",true))
+                    binding.btnpayment.visibility=View.VISIBLE
+            }
 
-            DirectionFinder(
-                this, binding.tvaddress.text.toString(),address.toString()
-            ).execute()
-
+            val strdate = parseDateToddMMyyyy(data.data.times.toString())
+            if (strdate != null) {
+                binding.tvdate.text = strdate.split("-")[1]
+                binding.tvtime.text = strdate.split("-")[0]
+            }
+            dlg.hideDlg(this)
         } catch (e: Exception) {
+            Log.e("exp",e.message.toString())
+            dlg.hideDlg(this)
         }
     }
 
     private fun initPrgDlg() {
+        dlg.CustomDlg(this,"Loading, please wait...")
+
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.google_map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
@@ -180,8 +275,37 @@ class ActivityOnMap : AppCompatActivity(), OnMapReadyCallback,
             finish()
         }
 
+        binding.btnpayment.setOnClickListener {
+
+        }
+
+
+        binding.imgmessage.setOnClickListener {
+            val intent=Intent(this,ChatActivity::class.java)
+            intent.putExtra("o_id",o_id.toString())
+            intent.putExtra("u_id",u_id.toString())
+            intent.putExtra("p_img",p_img.toString())
+            startActivity(intent)
+        }
+
+        binding.imgphone.setOnClickListener {
+            try {
+                val intent = Intent(Intent.ACTION_DIAL)
+                intent.data = Uri.parse("tel:"+binding.tvno.text.toString())
+                startActivity(intent)
+            }catch (e:Exception){
+                Log.e("exp",e.message.toString())
+            }
+        }
         binding.btnaccept.setOnClickListener {
-            updateOrderStatus()
+            if(status.equals("on the way") && binding.tvPstatus.text.toString().equals("Un Paid")
+                || binding.tvPstatus.text.toString().equals("Pending")){
+                Utility.displaySnackBar(
+                    binding.btnaccept, "Booking Payment Pending!",
+                    this@ActivityOnMap)
+            }
+            else
+                updateOrderStatus()
         }
 
         binding.tvMap.setOnClickListener {
@@ -189,6 +313,9 @@ class ActivityOnMap : AppCompatActivity(), OnMapReadyCallback,
             intent.putExtra("o_id", o_id.toString())
             startActivity(intent)
         }
+
+
+
     }
 
     private fun updateOrderStatus() {
@@ -206,6 +333,7 @@ class ActivityOnMap : AppCompatActivity(), OnMapReadyCallback,
                     if (response.body()?.success == true) {
                         try {
                             alertDialog!!.dismiss()
+                            dlg.hideDlg(this@ActivityOnMap)
                             val successDlg: LottieAlertDialog =
                                 LottieAlertDialog.Builder(
                                     this@ActivityOnMap,
@@ -252,9 +380,11 @@ class ActivityOnMap : AppCompatActivity(), OnMapReadyCallback,
                                     .build()
                             successDlg.show()
                         } catch (e: Exception) {
+                            dlg.hideDlg(this@ActivityOnMap)
                         }
                     } else {
                         alertDialog!!.dismiss()
+                        dlg.hideDlg(this@ActivityOnMap)
                         try {
                             var successDlg: LottieAlertDialog =
                                 LottieAlertDialog.Builder(
@@ -278,13 +408,15 @@ class ActivityOnMap : AppCompatActivity(), OnMapReadyCallback,
                             Log.e("failed", response.errorBody()?.string().toString())
 
                         } catch (e: Exception) {
+                            dlg.hideDlg(this@ActivityOnMap)
                         }
                     }
                 } catch (e: Exception) {
                     alertDialog!!.dismiss()
+                    dlg.hideDlg(this@ActivityOnMap)
                     try {
                         Utility.warningSnackBar(
-                            binding.root, e.message.toString(),
+                            binding.btnaccept, e.message.toString(),
                             this@ActivityOnMap
                         )
                     } catch (e: Exception) {
@@ -297,6 +429,7 @@ class ActivityOnMap : AppCompatActivity(), OnMapReadyCallback,
 
             override fun onFailure(call: Call<OrderStatus>, t: Throwable) {
                 alertDialog!!.dismiss()
+                dlg.hideDlg(this@ActivityOnMap)
                 try {
                     var message = ""
                     if (t is NoConnectivityException) {
@@ -505,6 +638,7 @@ class ActivityOnMap : AppCompatActivity(), OnMapReadyCallback,
             for (i in 0 until (route.points!!.size)) polylineOptions.add(route.points?.get(i))
             (polylinePaths as ArrayList<Polyline>).add(gMap!!.addPolyline(polylineOptions))
         }
+        dlg.hideDlg(this)
     }
 
     fun changeMakerSize(icon: Int, height: Int, width: Int): Bitmap? {

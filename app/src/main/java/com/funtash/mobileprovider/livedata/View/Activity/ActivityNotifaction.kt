@@ -15,10 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.funtash.mobileprovider.Api.RetrofitClient
 import com.funtash.mobileprovider.R
-import com.funtash.mobileprovider.Utils.NoConnectivityException
-import com.funtash.mobileprovider.Utils.Resource
-import com.funtash.mobileprovider.Utils.SwipeHelper
-import com.funtash.mobileprovider.Utils.Utility
+import com.funtash.mobileprovider.Utils.*
 import com.funtash.mobileprovider.databinding.ActivityNotifactionBinding
 import com.funtash.mobileprovider.livedata.View.Adapter.NotificationAdapter
 import com.funtash.mobileprovider.livedata.View.Adapter.OrderAdapter
@@ -37,6 +34,7 @@ import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class ActivityNotifaction : AppCompatActivity() {
 
@@ -44,6 +42,7 @@ class ActivityNotifaction : AppCompatActivity() {
     private var list:NotificationClass?=null
     private lateinit var viewModelLiveData: ViewModelLiveData
     private var alertDialog: LottieAlertDialog? = null
+    private val dlg= CustomLoader
     private  lateinit var binding : ActivityNotifactionBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +64,8 @@ class ActivityNotifaction : AppCompatActivity() {
         Prefs.initPrefs(this)
         api_token = Prefs.getString("api_token", "")
         Log.e("api_token", Prefs.getString("api_token", ""))
+
+        dlg.CustomDlg(this,"Loading, please wait...")
 
         binding.rvnoti.setHasFixedSize(true)
         binding.rvnoti.layoutManager=LinearLayoutManager(this)
@@ -98,11 +99,14 @@ class ActivityNotifaction : AppCompatActivity() {
                 Resource.Status.SUCCESS -> {
                     if (it.data?.success == true) {
                         try {
+                            Collections.reverse(it.data.data)
                             list=it.data
                               val adapter = NotificationAdapter(this, it.data)
                               binding.rvnoti.adapter = adapter
                             Log.e("size", ":" + it.data.data.size)
+                            dlg.hideDlg(this)
                         } catch (e: Exception) {
+                            dlg.hideDlg(this)
                         }
                         //data class LoginResponse(
                         // Log.e("error",it.data.message.toString())
@@ -111,7 +115,7 @@ class ActivityNotifaction : AppCompatActivity() {
                             binding.root, it.data.message,
                             this
                         )
-
+                        dlg.hideDlg(this)
                     }
                 }
                 Resource.Status.ERROR -> {
@@ -121,6 +125,7 @@ class ActivityNotifaction : AppCompatActivity() {
                         it.message ?: "",
                         this
                     )
+                    dlg.hideDlg(this)
                 }
 
                 Resource.Status.LOADING -> {
@@ -133,7 +138,7 @@ class ActivityNotifaction : AppCompatActivity() {
                         it.message ?: "",
                         this
                     )
-
+                    dlg.hideDlg(this)
                 }
             }
 
@@ -152,7 +157,8 @@ class ActivityNotifaction : AppCompatActivity() {
                     "Delete",
                     Color.parseColor("#C1272D")) {
                     Log.e("list:id", list?.data?.get(it)?.id.toString())
-                    val alert: AlertDialog.Builder = AlertDialog.Builder(this@ActivityNotifaction)
+                    deletenotification(list?.data?.get(it)?.id.toString())
+                   /* val alert: AlertDialog.Builder = AlertDialog.Builder(this@ActivityNotifaction)
                     alert.setTitle("Delete")
                     alert.setMessage("Are you sure you want to delete this TimeSlot?")
                         .setCancelable(true)
@@ -162,7 +168,7 @@ class ActivityNotifaction : AppCompatActivity() {
                                 deletenotification(list?.data?.get(it)?.id.toString())
                             })
                         .setNegativeButton("No", null)
-                    alert.show()
+                    alert.show()*/
 
                 })
             }
@@ -183,8 +189,9 @@ class ActivityNotifaction : AppCompatActivity() {
                         Log.e("response", "" + response.body())
                         if (response.body()?.success==true) {
                             try {
+                                loadnoti()
                                 alertDialog!!.dismiss()
-                                var  successDlg : LottieAlertDialog =
+                                /*var  successDlg : LottieAlertDialog =
                                     LottieAlertDialog.Builder(this@ActivityNotifaction, DialogTypes.TYPE_SUCCESS)
                                         .setTitle("Notification")
                                         .setDescription(response.body()?.message.toString())
@@ -200,7 +207,7 @@ class ActivityNotifaction : AppCompatActivity() {
                                             }
                                         })
                                         .build()
-                                successDlg.show()
+                                successDlg.show()*/
                             } catch (e: Exception) {
                             }
                         } else {

@@ -263,7 +263,7 @@
                         android:layout_marginStart="@dimen/_16sdp"
                         android:layout_marginTop="@dimen/_22sdp"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="Dark Theme"
+                        android:text="Theme"
                         android:drawableStart="@drawable/theme"
                         android:drawablePadding="@dimen/_5sdp"
                         android:textColor="@color/black"

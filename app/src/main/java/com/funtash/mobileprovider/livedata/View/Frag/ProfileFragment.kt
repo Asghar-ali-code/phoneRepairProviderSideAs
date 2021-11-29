@@ -63,7 +63,7 @@ class ProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = ProfileFragBinding.inflate(inflater)
+        binding = ProfileFragBinding.inflate(inflater,container,false)
 
         initUI()
         initdialog()

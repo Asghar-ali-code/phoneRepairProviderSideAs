@@ -13,10 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.funtash.mobileprovider.Api.RetrofitClient
 import com.funtash.mobileprovider.R
-import com.funtash.mobileprovider.Utils.GpsTracker
-import com.funtash.mobileprovider.Utils.NoConnectivityException
-import com.funtash.mobileprovider.Utils.Resource
-import com.funtash.mobileprovider.Utils.Utility
+import com.funtash.mobileprovider.Utils.*
 import com.funtash.mobileprovider.databinding.FragmentHomeBinding
 import com.funtash.mobileprovider.livedata.ViewModel.ViewModelLiveData
 import com.funtash.mobileprovider.response.MessageClass
@@ -41,7 +38,9 @@ class HomeFragment : Fragment() {
     private var api_token: String? = null
     private var status: String? = "current"
     private var view: String? = "1"
+    private var selectedFragment: Fragment? = null
     private lateinit var viewModelLiveData: ViewModelLiveData
+    private val dlg= CustomLoader
     private var alertDialog: LottieAlertDialog? = null
     private lateinit var binding: FragmentHomeBinding
 
@@ -57,7 +56,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentHomeBinding.inflate(inflater)
+        binding = FragmentHomeBinding.inflate(inflater,container,false)
 
 
 
@@ -79,13 +78,8 @@ class HomeFragment : Fragment() {
             .build()
         alertDialog!!.setCancelable(false)
 
-        //resource (drawable or raw)
-        //resource (drawable or raw)
-        //val gifFromResource = GifDrawable(resources, R.drawable.app_logo2)
 
         try {
-            // check if GPS enabled
-
             // check if GPS enabled
             val gpsTracker = GpsTracker(ctx)
 
@@ -125,126 +119,143 @@ class HomeFragment : Fragment() {
     }
 
     private fun click() {
-        var selectedFragment: Fragment? = null
+
 
         binding.cvRecieved.setOnClickListener {
-            status = "current"
-            selectedFragment=RecievedOrderFrag()
-            selectedFragment?.let {
-                parentFragmentManager.beginTransaction().replace(
-                    R.id.ordercontainer,
-                    it
-                ).commit()
-            }
-            when {
-                view.equals("3") -> {
-                    binding.tvOngoing.setTextColor(Color.parseColor("#000000"))
-                    binding.tvOngoing.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-                }
-                view.equals("2") -> {
-                    binding.tvAccepted.setTextColor(Color.parseColor("#000000"))
-                    binding.tvAccepted.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-                }
-                view.equals("4") -> {
-                    binding.tvPhonecheck.setTextColor(Color.parseColor("#000000"))
-                    binding.tvPhonecheck.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-                }
-            }
-            binding.tvRecieved.setTextColor(Color.parseColor("#FFFFFFFF"))
-            binding.tvRecieved.setBackgroundColor(Color.parseColor("#055C9D"))
-            view = "1"
+           recievedFrag()
         }
 
 
         binding.cvAccepted.setOnClickListener {
-            status = "accepted"
-            selectedFragment=AcceptedOrderFrag()
-            selectedFragment?.let {
-                parentFragmentManager.beginTransaction().replace(
-                    R.id.ordercontainer,
-                    it
-                ).commit()
-            }
-            when {
-                view.equals("1") -> {
-                    binding.tvRecieved.setTextColor(Color.parseColor("#000000"))
-                    binding.tvRecieved.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-                }
-                view.equals("3") -> {
-                    binding.tvOngoing.setTextColor(Color.parseColor("#000000"))
-                    binding.tvOngoing.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-                }
-                view.equals("4") -> {
-                    binding.tvPhonecheck.setTextColor(Color.parseColor("#000000"))
-                    binding.tvPhonecheck.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-                }
-            }
-            binding.tvAccepted.setTextColor(Color.parseColor("#FFFFFFFF"))
-            binding.tvAccepted.setBackgroundColor(Color.parseColor("#055C9D"))
-            view = "2"
+           acceptedFrag()
         }
 
 
         binding.cvOngoing.setOnClickListener {
-            status = "ongoing"
-            selectedFragment=OnGoingOrderFrag()
-            selectedFragment?.let {
-                parentFragmentManager.beginTransaction().replace(
-                    R.id.ordercontainer,
-                    it
-                ).commit()
-            }
-            when {
-                view.equals("1") -> {
-                    binding.tvRecieved.setTextColor(Color.parseColor("#000000"))
-                    binding.tvRecieved.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-                }
-                view.equals("2") -> {
-                    binding.tvAccepted.setTextColor(Color.parseColor("#000000"))
-                    binding.tvAccepted.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-                }
-                view.equals("4") -> {
-                    binding.tvPhonecheck.setTextColor(Color.parseColor("#000000"))
-                    binding.tvPhonecheck.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-                }
-            }
-            binding.tvOngoing.setTextColor(Color.parseColor("#FFFFFFFF"))
-            binding.tvOngoing.setBackgroundColor(Color.parseColor("#055C9D"))
-            view = "3"
+           ongoingFrag()
         }
 
         binding.cvPhonecheck.setOnClickListener {
-            status = "completed"
-            selectedFragment=PhoneCheckOrderFrag()
-            selectedFragment?.let {
-                parentFragmentManager.beginTransaction().replace(
-                    R.id.ordercontainer,
-                    it
-                ).commit()
-            }
-            when {
-                view.equals("1") -> {
-                    binding.tvRecieved.setTextColor(Color.parseColor("#000000"))
-                    binding.tvRecieved.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-                }
-                view.equals("2") -> {
-                    binding.tvAccepted.setTextColor(Color.parseColor("#000000"))
-                    binding.tvAccepted.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-                }
-                view.equals("3") -> {
-                    binding.tvOngoing.setTextColor(Color.parseColor("#000000"))
-                    binding.tvOngoing.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-                }
-            }
-            binding.tvPhonecheck.setTextColor(Color.parseColor("#FFFFFFFF"))
-            binding.tvPhonecheck.setBackgroundColor(Color.parseColor("#055C9D"))
-            view = "4"
+           phonecheckFrag()
         }
 
     }
 
+    private fun phonecheckFrag() {
+        status = "completed"
+        selectedFragment=PhoneCheckOrderFrag()
+        selectedFragment?.let {
+            parentFragmentManager.beginTransaction().replace(
+                R.id.ordercontainer,
+                it
+            ).commit()
+        }
+        when {
+            view.equals("1") -> {
+                binding.tvRecieved.setTextColor(Color.parseColor("#000000"))
+                binding.tvRecieved.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            }
+            view.equals("2") -> {
+                binding.tvAccepted.setTextColor(Color.parseColor("#000000"))
+                binding.tvAccepted.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            }
+            view.equals("3") -> {
+                binding.tvOngoing.setTextColor(Color.parseColor("#000000"))
+                binding.tvOngoing.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            }
+        }
+        binding.tvPhonecheck.setTextColor(Color.parseColor("#FFFFFFFF"))
+        binding.tvPhonecheck.setBackgroundColor(Color.parseColor("#055C9D"))
+        view = "4"
+    }
+
+    private fun ongoingFrag() {
+        status = "ongoing"
+        selectedFragment=OnGoingOrderFrag()
+        selectedFragment?.let {
+            parentFragmentManager.beginTransaction().replace(
+                R.id.ordercontainer,
+                it
+            ).commit()
+        }
+        when {
+            view.equals("1") -> {
+                binding.tvRecieved.setTextColor(Color.parseColor("#000000"))
+                binding.tvRecieved.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            }
+            view.equals("2") -> {
+                binding.tvAccepted.setTextColor(Color.parseColor("#000000"))
+                binding.tvAccepted.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            }
+            view.equals("4") -> {
+                binding.tvPhonecheck.setTextColor(Color.parseColor("#000000"))
+                binding.tvPhonecheck.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            }
+        }
+        binding.tvOngoing.setTextColor(Color.parseColor("#FFFFFFFF"))
+        binding.tvOngoing.setBackgroundColor(Color.parseColor("#055C9D"))
+        view = "3"
+    }
+
+    private fun acceptedFrag() {
+        status = "accepted"
+        selectedFragment=AcceptedOrderFrag()
+        selectedFragment?.let {
+            parentFragmentManager.beginTransaction().replace(
+                R.id.ordercontainer,
+                it
+            ).commit()
+        }
+        when {
+            view.equals("1") -> {
+                binding.tvRecieved.setTextColor(Color.parseColor("#000000"))
+                binding.tvRecieved.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            }
+            view.equals("3") -> {
+                binding.tvOngoing.setTextColor(Color.parseColor("#000000"))
+                binding.tvOngoing.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            }
+            view.equals("4") -> {
+                binding.tvPhonecheck.setTextColor(Color.parseColor("#000000"))
+                binding.tvPhonecheck.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            }
+        }
+        binding.tvAccepted.setTextColor(Color.parseColor("#FFFFFFFF"))
+        binding.tvAccepted.setBackgroundColor(Color.parseColor("#055C9D"))
+        view = "2"
+    }
+
+    private fun recievedFrag() {
+        status = "current"
+        selectedFragment=RecievedOrderFrag()
+        selectedFragment?.let {
+            parentFragmentManager.beginTransaction().replace(
+                R.id.ordercontainer,
+                it
+            ).commit()
+        }
+        when {
+            view.equals("3") -> {
+                binding.tvOngoing.setTextColor(Color.parseColor("#000000"))
+                binding.tvOngoing.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            }
+            view.equals("2") -> {
+                binding.tvAccepted.setTextColor(Color.parseColor("#000000"))
+                binding.tvAccepted.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            }
+            view.equals("4") -> {
+                binding.tvPhonecheck.setTextColor(Color.parseColor("#000000"))
+                binding.tvPhonecheck.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            }
+        }
+        binding.tvRecieved.setTextColor(Color.parseColor("#FFFFFFFF"))
+        binding.tvRecieved.setBackgroundColor(Color.parseColor("#055C9D"))
+        view = "1"
+    }
+
 
     private fun loadEarning() {
+       // dlg.CustomDlg(ctx!!,"Loading, please wait...")
         viewModelLiveData.getEarning(api_token.toString())
         activity?.let {
             viewModelLiveData.earning.observe(it, Observer {
@@ -255,12 +266,13 @@ class HomeFragment : Fragment() {
                         if (it.data?.success == true) {
                             ctx?.let { it1 ->
                                 try {
-                                    binding.tvbooking.text = it.data.data.totalBookings.toString()
-                                    binding.tvearning.text = it.data.data.totalEarnings.toString()
-                                    binding.tvcustomer.text =
-                                        it.data.data.totalCustomers.toString()
-
+                                    binding.tvbooking.text = it.data.data.totalOrders.toString()
+                                    binding.tvnewbooking.text = it.data.data.newOrders.toString()
+                                    binding.tvactive.text =
+                                        it.data.data.ActiveOrders.toString()
+                                    dlg.hideDlg(ctx!!)
                                 } catch (e: Exception) {
+                                    dlg.hideDlg(ctx!!)
                                 }
                             }
                             //data class LoginResponse(
@@ -271,6 +283,7 @@ class HomeFragment : Fragment() {
                                     binding.root, it.data.message,
                                     it1
                                 )
+                                dlg.hideDlg(ctx!!)
                             }
 
                         }
@@ -283,6 +296,7 @@ class HomeFragment : Fragment() {
                                 it.message ?: "",
                                 it1
                             )
+                            dlg.hideDlg(ctx!!)
                         }
 
                     }
@@ -299,6 +313,7 @@ class HomeFragment : Fragment() {
                                 it1
                             )
                         }
+                        dlg.hideDlg(ctx!!)
 
                     }
                 }

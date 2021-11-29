@@ -23,10 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.funtash.mobileprovider.Api.RetrofitClient
 import com.funtash.mobileprovider.R
-import com.funtash.mobileprovider.Utils.GpsTracker
-import com.funtash.mobileprovider.Utils.NoConnectivityException
-import com.funtash.mobileprovider.Utils.Resource
-import com.funtash.mobileprovider.Utils.Utility
+import com.funtash.mobileprovider.Utils.*
 import com.funtash.mobileprovider.databinding.FragmentHomeBinding
 import com.funtash.mobileprovider.databinding.RecievedorderFragBinding
 import com.funtash.mobileprovider.livedata.View.Adapter.OrderAdapter
@@ -45,16 +42,18 @@ import de.hdodenhof.circleimageview.CircleImageView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class OnGoingOrderFrag : Fragment() {
 
 
     var ctx: Context? = null
     private var api_token: String? = null
-    private var status: String? = "on the way"
+    private var status: String? = "ongoing"
     private var view: String? = "1"
     private lateinit var viewModelLiveData: ViewModelLiveData
     private var alertDialog: LottieAlertDialog? = null
+    private val dlg= CustomLoader
     private lateinit var binding: RecievedorderFragBinding
 
 
@@ -69,7 +68,7 @@ class OnGoingOrderFrag : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = RecievedorderFragBinding.inflate(inflater)
+        binding = RecievedorderFragBinding.inflate(inflater,container,false)
 
 
 
@@ -91,6 +90,9 @@ class OnGoingOrderFrag : Fragment() {
             .build()
         alertDialog!!.setCancelable(false)
 
+        dlg.CustomDlg(ctx!!,"Loading, please wait...")
+        dlg.showDlg(ctx!!)
+
     }
 
     private fun loadOrders() {
@@ -104,15 +106,20 @@ class OnGoingOrderFrag : Fragment() {
                         if (it.data?.success == true) {
                             ctx?.let { it1 ->
                                 try {
+                                    Collections.sort(it.data.data)
+                                    { lhs, rhs -> lhs.times.compareTo(rhs.times) }
+
                                     val adapter = OrderAdapter(OnGoingOrderFrag(), ctx, it.data, status)
                                     binding.rvOrder.adapter = adapter
                                     Log.e("size", ":" + it.data.data.size)
+                                    dlg.hideDlg(ctx!!)
                                 } catch (e: Exception) {
                                 }
                             }
                             //data class LoginResponse(
                             // Log.e("error",it.data.message.toString())
                         } else if (it.data?.success == false) {
+                            dlg.hideDlg(ctx!!)
                             ctx?.let { it1 ->
                                 Utility.displaySnackBar(
                                     binding.root, it.data.message,
@@ -123,14 +130,15 @@ class OnGoingOrderFrag : Fragment() {
                         }
                     }
                     Resource.Status.ERROR -> {
+                        dlg.hideDlg(ctx!!)
                         Log.e("error", it.message.toString())
-                        ctx?.let { it1 ->
+                       /* ctx?.let { it1 ->
                             Utility.displaySnackBar(
                                 binding.root,
                                 it.message ?: "",
                                 it1
                             )
-                        }
+                        }*/
 
                     }
 
@@ -138,6 +146,7 @@ class OnGoingOrderFrag : Fragment() {
                     }
 
                     Resource.Status.FAILURE -> {
+                        dlg.hideDlg(ctx!!)
                         alertDialog!!.dismiss()
                         ctx?.let { it1 ->
                             Utility.displaySnackBar(

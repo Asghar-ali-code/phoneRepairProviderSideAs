@@ -126,8 +126,8 @@ class ActivityLogin : AppCompatActivity() {
                     Log.e("response", "" + response.body())
                     if (response.body()?.success==true) {
                         try {
-                            var  successDlg : LottieAlertDialog
-                            successDlg = LottieAlertDialog.Builder(this@ActivityLogin, DialogTypes.TYPE_SUCCESS)
+                            var  successDlg : LottieAlertDialog =
+                                LottieAlertDialog.Builder(this@ActivityLogin, DialogTypes.TYPE_SUCCESS)
                                 .setTitle("Forget Password")
                                 .setDescription(response.body()?.message.toString())
                                 .setPositiveText("OK")
@@ -135,6 +135,7 @@ class ActivityLogin : AppCompatActivity() {
                                 .setPositiveListener(object: ClickListener {
                                     override fun onClick(dialog: LottieAlertDialog) {
                                         // This is the usage same instance of view
+                                        alertDialog!!.dismiss()
                                         dialog.dismiss()
                                     }
                                 })

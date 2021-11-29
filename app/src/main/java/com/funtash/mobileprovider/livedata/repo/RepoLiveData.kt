@@ -12,6 +12,9 @@ class RepoLiveData(private val apiHelper: ApiHelper) : BaseDataSource() {
     suspend fun provider_totalearnings(apitoken : String) =
         safeApiCall { apiHelper.provider_totalearnings(apitoken)}
 
+    suspend fun service(cid : String) =
+        safeApiCall { apiHelper.services(cid)}
+
     suspend fun provider_orders(apitoken: String,status:String) =
         safeApiCall { apiHelper.provider_orders(apitoken,status)}
 
@@ -26,4 +29,8 @@ class RepoLiveData(private val apiHelper: ApiHelper) : BaseDataSource() {
 
     suspend fun getbooking_details(api_token:String,url:String) =
         safeApiCall { apiHelper.getbooking_detail(api_token,url)}
+
+    suspend fun chat_list(api_token:String,o_id:String) =
+        safeApiCall { apiHelper.chat_list(api_token,o_id)}
+
 }

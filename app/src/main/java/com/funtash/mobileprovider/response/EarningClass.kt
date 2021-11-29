@@ -8,7 +8,7 @@ data class EarningClass(
 
 )
 data class DataX(
-    val totalBookings: Int,
-    val totalCustomers: Int,
-    val totalEarnings: Int
+    val totalOrders: Int,
+    val newOrders: Int,
+    val ActiveOrders: Int
 )

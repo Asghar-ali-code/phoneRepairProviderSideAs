@@ -365,7 +365,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/view1" />
 
                     <TextView
-                        android:id="@+id/tview6"
+                        android:id="@+id/tv_pstatus"
                         android:layout_width="@dimen/_80sdp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_72sdp"
@@ -374,7 +374,7 @@
                         android:background="@color/grey"
                         android:fontFamily="@font/poppins_medium"
                         android:gravity="center"
-                        android:text="Not Paid"
+                        android:text="Un Paid"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_12ssp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -514,25 +514,28 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/innerView5"
                 app:layout_constraintTop_toTopOf="@+id/innerView5" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:visibility="gone"
-                android:id="@+id/btndecline"
-                android:layout_width="@dimen/_100sdp"
-                android:layout_height="@dimen/_25sdp"
-                app:layout_constraintStart_toEndOf="@+id/btnaccept"
-                android:layout_marginBottom="@dimen/_10sdp"
+                android:id="@+id/btnpayment"
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginStart="@dimen/_12sdp"
-                app:layout_constraintTop_toTopOf="@+id/innerView5"
-                app:layout_constraintBottom_toBottomOf="@+id/innerView5"
-                app:layout_constraintEnd_toEndOf="@+id/innerView5"
-                android:text="Decline"
-                android:gravity="center"
-                android:textSize="@dimen/_10ssp"
-                android:padding="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/bg_btn"
+                android:drawableRight="@drawable/services"
+                android:drawablePadding="@dimen/_8sdp"
                 android:fontFamily="@font/poppins_medium"
-                android:background="@color/gray"
-                />
+                android:gravity="center"
+                android:padding="@dimen/_5sdp"
+                android:text="Payment Received"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/innerView5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/innerView5"
+                app:layout_constraintTop_toTopOf="@+id/innerView5" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
